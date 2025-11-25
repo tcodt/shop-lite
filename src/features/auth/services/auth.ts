@@ -1,5 +1,5 @@
 import api from "@/api/client";
-import type { LoginRequest, LoginResponse, User } from "@/types/auth";
+import type { LoginRequest, LoginResponse, User } from "@/shared/types/auth";
 
 export const login = async (
   credentials: LoginRequest

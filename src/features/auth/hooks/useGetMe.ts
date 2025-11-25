@@ -1,5 +1,5 @@
-import { getMe } from "@/services/auth/auth";
-import { storage } from "@/utils/token-storage";
+import { getMe } from "@/features/auth/services/auth";
+import { storage } from "@/shared/utils/token-storage";
 import { useQuery } from "@tanstack/react-query";
 
 export const useGetMe = () => {

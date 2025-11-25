@@ -1,5 +1,5 @@
-import { Spinner } from "@/components/ui/spinner";
-import { useAuth } from "@/contexts/AuthContext";
+import { Spinner } from "@/shared/components/ui/spinner";
+import { useAuth } from "@/features/auth/contexts/AuthContext";
 import type { ReactNode } from "react";
 import { Navigate } from "react-router";
 

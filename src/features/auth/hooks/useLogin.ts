@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { login } from "@/services/auth/auth";
+import { login } from "@/features/auth/services/auth";
 import toast from "react-hot-toast";
 import type { AxiosError } from "axios";
-import { storage } from "@/utils/token-storage";
+import { storage } from "@/shared/utils/token-storage";
 import { useNavigate } from "react-router";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/features/auth/contexts/AuthContext";
 
 export const useLogin = () => {
   const queryClient = useQueryClient();

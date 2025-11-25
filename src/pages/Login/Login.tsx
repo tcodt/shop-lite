@@ -1,12 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import type { LoginRequest } from "@/types/auth";
+import { Button } from "@/shared/components/ui/button";
+import { Input } from "@/shared/components/ui/input";
+import type { LoginRequest } from "@/shared/types/auth";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 // import { authValidations } from "@/utils/auth-validations";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
-import { useLogin } from "@/hooks/useLogin/useLogin";
-import { Spinner } from "@/components/ui/spinner";
+import { useLogin } from "@/features/auth/hooks/useLogin";
+import { Spinner } from "@/shared/components/ui/spinner";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);

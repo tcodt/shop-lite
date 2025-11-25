@@ -5,8 +5,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { User } from "@/types/auth";
-import { storage } from "@/utils/token-storage";
+import type { User } from "@/shared/types/auth";
+import { storage } from "@/shared/utils/token-storage";
 import api from "@/api/client";
 
 interface AuthContextType {

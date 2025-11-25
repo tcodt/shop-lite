@@ -1,6 +1,6 @@
 // src/api/client.ts
 import axios from "axios";
-import { storage } from "@/utils/token-storage";
+import { storage } from "@/shared/utils/token-storage";
 
 const api = axios.create({
   baseURL: "https://dummyjson.com",
