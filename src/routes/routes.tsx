@@ -1,11 +1,16 @@
 import { createBrowserRouter } from "react-router";
 import Login from "../pages/Login/Login";
 import App from "../App";
+import ProtectedRoutes from "./ProtectedRoutes";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    Component: App,
+    element: (
+      <ProtectedRoutes>
+        <App />
+      </ProtectedRoutes>
+    ),
   },
   {
     path: "/login",
