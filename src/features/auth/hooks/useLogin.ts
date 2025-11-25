@@ -29,10 +29,10 @@ export const useLogin = () => {
       setUser(safeUser);
       queryClient.invalidateQueries({ queryKey: ["me"] });
       toast.success("Welcome back!");
-      navigate("/", { replace: true });
+      navigate("/dashboard", { replace: true });
     },
     onError: (error: AxiosError) => {
-      toast.error("Login failed. Please check your credentials.");
+      toast.error("failed! Please check your credentials.");
       console.log("Login faild: ", error);
     },
   });

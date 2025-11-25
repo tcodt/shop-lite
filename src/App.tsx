@@ -1,10 +1,9 @@
-import { Toaster } from "react-hot-toast";
-
 const App = () => {
   return (
     <>
-      <Toaster />
-      <h1>App</h1>
+      <section className="container *:mx-auto p-4">
+        <h1>App</h1>
+      </section>
     </>
   );
 };
