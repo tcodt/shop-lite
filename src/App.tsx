@@ -1,10 +1,11 @@
-import { Button } from "./components/ui/button";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   return (
-    <div>
-      <Button>Button</Button>
-    </div>
+    <>
+      <Toaster />
+      <h1>App</h1>
+    </>
   );
 };
 
