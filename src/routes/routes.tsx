@@ -4,6 +4,8 @@ import App from "../App";
 import ProtectedRoutes from "./ProtectedRoutes";
 import Dashboard from "@/pages/Dashboard/Dashboard";
 import Register from "@/pages/Register/Register";
+import Home from "@/pages/Dashboard/Home";
+import Users from "@/pages/Dashboard/Users";
 
 const router = createBrowserRouter([
   {
@@ -12,6 +14,10 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
+    children: [
+      { index: true, element: <Home /> },
+      { path: "/dashboard/users", element: <Users /> },
+    ],
     element: (
       <ProtectedRoutes>
         <Dashboard />

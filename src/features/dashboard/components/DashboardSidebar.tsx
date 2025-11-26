@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { Calendar, Home, Search, Settings, Users } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -14,13 +14,13 @@ import LogoutModal from "./LogoutModal";
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: "/dashboard",
     icon: Home,
   },
   {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
+    title: "Users",
+    url: "/dashboard/users",
+    icon: Users,
   },
   {
     title: "Calendar",

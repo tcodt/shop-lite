@@ -10,7 +10,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
     <>
       <SidebarProvider>
         <DashboardSidebar />
-        <main>
+        <main className="w-full">
           <SidebarTrigger />
           {children}
         </main>
