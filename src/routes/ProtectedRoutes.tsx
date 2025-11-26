@@ -9,7 +9,10 @@ const ProtectedRoutes = ({ children }: { children: ReactNode }) => {
   if (loading)
     return (
       <div className="flex items-center justify-center h-screen">
-        <Spinner />
+        <div className="flex items-center flex-col gap-1">
+          <Spinner />
+          <p className="font-semibold text-sm">Loading...</p>
+        </div>
       </div>
     );
 

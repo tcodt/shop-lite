@@ -4,6 +4,7 @@ import {
   ModalContextProvider,
   useModalDashboard,
 } from "@/features/dashboard/contexts/ModalContext";
+import { Outlet } from "react-router";
 
 const Dashboard = () => {
   return (
@@ -23,7 +24,7 @@ const DashboardContent = () => {
   return (
     <div className="p-8">
       {isOpen && <LogoutModal />}
-      <h1>This is Dashboard Content</h1>
+      <Outlet />
     </div>
   );
 };
