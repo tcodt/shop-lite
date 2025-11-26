@@ -1,31 +1,34 @@
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
-import type { LoginRequest } from "@/shared/types/auth";
+import type { RegisterRequest } from "@/shared/types/auth";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 // import { authValidations } from "@/utils/auth-validations";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
-import { useLogin } from "@/features/auth/hooks/useLogin";
 import { Spinner } from "@/shared/components/ui/spinner";
 import { Link } from "react-router";
+import { useRegister } from "@/features/auth/hooks/useRegister";
 
-const Login = () => {
+const Register = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const loginMutation = useLogin();
+  const registerMutation = useRegister();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginRequest>({
+  } = useForm<RegisterRequest>({
     defaultValues: {
       username: "",
+      email: "",
       password: "",
+      firstName: "",
+      lastName: "",
     },
   });
 
-  const handleLoginForm = (data: LoginRequest) => {
-    loginMutation.mutate(data);
+  const handleLoginForm = (data: RegisterRequest) => {
+    registerMutation.mutate(data);
   };
 
   const togglePassword = () => {
@@ -36,9 +39,11 @@ const Login = () => {
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white shadow-md rounded-xl p-4 min-w-[250px] sm:min-w-sm space-y-8">
         <div className="space-y-2 text-center">
-          <h3 className="text-2xl font-semibold text-gray-800">Welcom Back!</h3>
+          <h3 className="text-2xl font-semibold text-gray-800">
+            Welcom to Shop Lite
+          </h3>
           <p className="text-base font-normal text-gray-500">
-            Please login to your account
+            Please fill the form to create an account
           </p>
         </div>
         <form
@@ -52,23 +57,33 @@ const Login = () => {
               className="text-sm font-medium text-gray-700"
               {...register("username", {
                 required: "Username is required",
-                // pattern: {
-                //   value: authValidations.username,
-                //   message: "Username must only contain letters",
-                // },
                 minLength: {
                   value: 3,
                   message: "Username must be at least 3 characters",
                 },
-                // maxLength: {
-                //   value: 20,
-                //   message: "Username must be less than 20 characters",
-                // },
               })}
             />
             {errors.username && (
               <span className="text-sm font-normal text-red-500 mt-2 block">
                 {errors.username.message}
+              </span>
+            )}
+          </div>
+          <div>
+            <Input
+              type="email"
+              placeholder="Email"
+              className="text-sm font-medium text-gray-700"
+              {...register("email", {
+                minLength: {
+                  value: 3,
+                  message: "Email must be at least 3 characters",
+                },
+              })}
+            />
+            {errors.email && (
+              <span className="text-sm font-normal text-red-500 mt-2 block">
+                {errors.email.message}
               </span>
             )}
           </div>
@@ -80,20 +95,10 @@ const Login = () => {
                 className="text-sm font-medium text-gray-700"
                 {...register("password", {
                   required: "Password is required",
-                  // pattern: {
-                  //   value: authValidations.password,
-                  //   message: "",
-                  // },
                   minLength: {
                     value: 6,
                     message: "Password must be at least 6 characters",
                   },
-                  // validate: (value) => {
-                  //   if (value && !authValidations.password.test(value)) {
-                  //     return "For stronger security, include letters, numbers, and symbols";
-                  //   }
-                  //   return true;
-                  // },
                 })}
               />
               <Button
@@ -113,14 +118,14 @@ const Login = () => {
           </div>
 
           <span className="text-sm font-medium text-gray-600">
-            Don't have an account?{" "}
-            <Link to="/register" className="text-gray-800">
-              Register
+            Already have an account?{" "}
+            <Link to="/login" className="text-gray-800">
+              Login
             </Link>
           </span>
 
           <Button type="submit" size={"lg"} className="cursor-pointer">
-            {loginMutation.isPending ? (
+            {registerMutation.isPending ? (
               <Spinner className="size-4 text-white" />
             ) : (
               "Submit"
@@ -132,4 +137,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

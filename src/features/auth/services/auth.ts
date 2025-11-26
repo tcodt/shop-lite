@@ -1,5 +1,10 @@
 import api from "@/api/client";
-import type { LoginRequest, LoginResponse, User } from "@/shared/types/auth";
+import type {
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+  User,
+} from "@/shared/types/auth";
 
 export const login = async (
   credentials: LoginRequest
@@ -8,6 +13,11 @@ export const login = async (
     username: credentials.username,
     password: credentials.password,
   });
+  return response.data;
+};
+
+export const register = async (userData: RegisterRequest) => {
+  const response = await api.post("/users/add", userData);
   return response.data;
 };
 
