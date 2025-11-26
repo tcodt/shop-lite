@@ -23,3 +23,22 @@ export interface User {
   lastName: string;
   image: string;
 }
+
+export interface RegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+}
+
+export interface RegisterResponse {
+  id: number;
+  username: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  image: string;
+  accessToken: string;
+  refreshToken: string;
+}
