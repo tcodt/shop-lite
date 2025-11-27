@@ -10,6 +10,7 @@ import {
   SidebarMenuItem,
 } from "@/shared/components/ui/sidebar";
 import LogoutModal from "./LogoutModal";
+import { useAuth } from "@/features/auth/contexts/AuthContext";
 
 const items = [
   {
@@ -40,12 +41,16 @@ const items = [
 ];
 
 const DashboardSidebar = () => {
+  const { user } = useAuth();
+
   return (
     <Sidebar>
-      <SidebarContent className="flex flex-col h-full p-4">
+      <SidebarContent className="flex flex-col h-full p-4 bg-white">
         {/* Top Section */}
         <div>
-          <SidebarHeader>Shop Lite Dashboard</SidebarHeader>
+          <SidebarHeader className="block">
+            Welcome <strong>{user?.username}</strong>
+          </SidebarHeader>
 
           <SidebarGroup>
             <SidebarGroupContent>
