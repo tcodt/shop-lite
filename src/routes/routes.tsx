@@ -6,17 +6,19 @@ import Dashboard from "@/pages/Dashboard/Dashboard";
 import Register from "@/pages/Register/Register";
 import Home from "@/pages/Dashboard/Home";
 import Users from "@/pages/Dashboard/Users";
+import UserInfo from "@/pages/Dashboard/UserInfo";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    Component: App,
+    element: <App />,
   },
   {
     path: "/dashboard",
     children: [
       { index: true, element: <Home /> },
-      { path: "/dashboard/users", element: <Users /> },
+      { path: "users", element: <Users /> },
+      { path: "users/:id", element: <UserInfo /> },
     ],
     element: (
       <ProtectedRoutes>
@@ -26,11 +28,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    Component: Login,
+    element: <Login />,
   },
   {
     path: "/register",
-    Component: Register,
+    element: <Register />,
   },
 ]);
 
