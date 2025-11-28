@@ -42,7 +42,7 @@ interface Crypto {
 type Gender = "male" | "female";
 type Role = "admin" | "moderator" | "user";
 
-interface User {
+export interface UserObj {
   id: number;
   firstName: string;
   lastName: string;
@@ -74,7 +74,7 @@ interface User {
 }
 
 export interface UsersApiResponse {
-  users: User[];
+  users: UserObj[];
   total: number;
   skip: number;
   limit: number;

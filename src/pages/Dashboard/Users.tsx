@@ -24,6 +24,7 @@ import {
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { Plus, Search } from "lucide-react";
 import { useMemo, useState, type ChangeEvent } from "react";
+import { Link } from "react-router";
 
 const Users = () => {
   const { data, isPending } = useGetAllUsers();
@@ -154,29 +155,32 @@ const Users = () => {
             </div>
           ) : (
             displayUsers.map((user) => (
-              <Item
-                variant={"outline"}
+              <Link
+                to={`/dashboard/users/${user.id}`}
+                key={user.id}
                 className="sm:col-span-4 col-span-full w-full bg-white"
               >
-                <ItemHeader>{user.role}</ItemHeader>
-                <ItemMedia>
-                  <Avatar className="ring-2 ring-gray-300 rounded-full p-1 bg-gray-200">
-                    <AvatarImage
-                      src={user.image}
-                      alt={user.firstName}
-                      height={50}
-                      width={50}
-                      className="rounded-full"
-                    />
-                  </Avatar>
-                </ItemMedia>
-                <ItemContent>
-                  <ItemTitle>{user.firstName}</ItemTitle>
-                  <ItemDescription>
-                    {user.firstName} {user.lastName}
-                  </ItemDescription>
-                </ItemContent>
-              </Item>
+                <Item variant={"outline"}>
+                  <ItemHeader>{user.role}</ItemHeader>
+                  <ItemMedia>
+                    <Avatar className="ring-2 ring-gray-300 rounded-full p-1 bg-gray-200">
+                      <AvatarImage
+                        src={user.image}
+                        alt={user.firstName}
+                        height={50}
+                        width={50}
+                        className="rounded-full"
+                      />
+                    </Avatar>
+                  </ItemMedia>
+                  <ItemContent>
+                    <ItemTitle>{user.firstName}</ItemTitle>
+                    <ItemDescription>
+                      {user.firstName} {user.lastName}
+                    </ItemDescription>
+                  </ItemContent>
+                </Item>
+              </Link>
             ))
           )}
         </div>
