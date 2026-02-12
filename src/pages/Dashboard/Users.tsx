@@ -1,6 +1,16 @@
+import { useAddUser } from "@/features/users/hooks/useAddUser";
 import { useGetAllUsers } from "@/features/users/hooks/useGetAllUsers";
+import { useGetUsersPaginated } from "@/features/users/hooks/useGetUsersPaginated";
 import { Badge } from "@/shared/components/ui/badge";
-import { Button } from "@/shared/components/ui/button";
+import { Button, buttonVariants } from "@/shared/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/shared/components/ui/dialog";
+import { Input } from "@/shared/components/ui/input";
 import {
   InputGroup,
   InputGroupAddon,
@@ -14,6 +24,14 @@ import {
   ItemMedia,
   ItemTitle,
 } from "@/shared/components/ui/item";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/shared/components/ui/pagination";
 import { Separator } from "@/shared/components/ui/separator";
 import { Spinner } from "@/shared/components/ui/spinner";
 import {
@@ -24,11 +42,51 @@ import {
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { Plus, Search } from "lucide-react";
 import { useMemo, useState, type ChangeEvent } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { LuEye, LuEyeClosed } from "react-icons/lu";
 import { Link } from "react-router";
+
+interface AddUserType {
+  username: string;
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}
 
 const Users = () => {
   const { data, isPending } = useGetAllUsers();
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const { register, handleSubmit, reset } = useForm({
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      firstName: "",
+      lastName: "",
+    },
+  });
+
+  const [page, setPage] = useState<number>(1);
+  const [search, setSearch] = useState<string>("");
+
+  const { data: usersPaginationData } = useGetUsersPaginated(page, search);
+  const addUserMutation = useAddUser();
+
+  const totalPages = usersPaginationData
+    ? Math.ceil(usersPaginationData.total / usersPaginationData.limit)
+    : 1;
+
+  const PAGINATION_RANGE = 2;
+
+  const startPage = Math.max(1, page - PAGINATION_RANGE);
+  const endPage = Math.min(totalPages, page + PAGINATION_RANGE);
+
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const filteredUsers = useMemo(() => {
     if (!data?.users) return [];
@@ -66,6 +124,18 @@ const Users = () => {
   const moderatorCount =
     displayUsers.filter((user) => user.role === "moderator")?.length ?? 0;
 
+  const handleAddUserForm = (data: AddUserType) => {
+    if (!data.username || !data.email || !data.password) {
+      return toast.error("Please fill in all required fields.");
+    }
+
+    addUserMutation.mutate(data, {
+      onSuccess: () => {
+        reset();
+      },
+    });
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -78,16 +148,80 @@ const Users = () => {
           </p>
         </div>
         <div>
-          <Tooltip>
-            <TooltipTrigger>
-              <Button className="rounded-full cursor-pointer">
-                <Plus />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Add new user</p>
-            </TooltipContent>
-          </Tooltip>
+          <Dialog>
+            <Tooltip>
+              <DialogTrigger asChild>
+                <TooltipTrigger asChild>
+                  <Button className="rounded-full cursor-pointer">
+                    <Plus />
+                  </Button>
+                </TooltipTrigger>
+              </DialogTrigger>
+
+              <TooltipContent>
+                <p>Add new user</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <DialogContent className="bg-gray-100">
+              <DialogHeader>
+                <DialogTitle>Add new user</DialogTitle>
+              </DialogHeader>
+
+              {/* Add user form */}
+              <form
+                onSubmit={handleSubmit(handleAddUserForm)}
+                className="grid grid-cols-12 gap-4"
+              >
+                <Input
+                  type="text"
+                  placeholder="Username"
+                  className="bg-white col-span-6 text-sm font-medium text-gray-800"
+                  {...register("username")}
+                />
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  className="bg-white col-span-6 text-sm font-medium text-gray-800"
+                  {...register("email")}
+                />
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  className="bg-white col-span-10 text-sm font-medium text-gray-800"
+                  {...register("password")}
+                />
+                <Button
+                  type="button"
+                  variant={"outline"}
+                  className="cursor-pointer col-span-2"
+                  onClick={togglePassword}
+                >
+                  {showPassword ? <LuEyeClosed /> : <LuEye />}
+                </Button>
+                <Input
+                  type="text"
+                  placeholder="First Name"
+                  className="bg-white col-span-6 text-sm font-medium text-gray-800"
+                  {...register("firstName")}
+                />
+                <Input
+                  type="text"
+                  placeholder="Last Name"
+                  className="bg-white col-span-6 text-sm font-medium text-gray-800"
+                  {...register("lastName")}
+                />
+
+                <Button
+                  type="submit"
+                  size={"lg"}
+                  className="col-span-full cursor-pointer"
+                >
+                  Add
+                </Button>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
@@ -131,6 +265,8 @@ const Users = () => {
           </InputGroup>
         </div>
 
+        {/* Add Modal */}
+
         {/* Search results info */}
         {searchQuery && (
           <div className="mt-4 text-sm text-gray-600">
@@ -144,7 +280,7 @@ const Users = () => {
           </div>
         )}
 
-        <div className="grid grid-cols-12 gap-4 mt-8">
+        <div className="grid grid-cols-12 gap-4 mt-8 auto-rows-max">
           {isPending ? (
             <div className="col-span-full flex justify-center py-8">
               <Spinner />
@@ -154,7 +290,8 @@ const Users = () => {
               No users found matching "{searchQuery}"
             </div>
           ) : (
-            displayUsers.map((user) => (
+            usersPaginationData &&
+            usersPaginationData.users.map((user) => (
               <Link
                 to={`/dashboard/users/${user.id}`}
                 key={user.id}
@@ -184,6 +321,59 @@ const Users = () => {
             ))
           )}
         </div>
+
+        <Pagination className="mt-8">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                className={buttonVariants({ variant: "outline" })}
+                onClick={() => setPage((p) => Math.max(p - 1, 1))}
+              />
+            </PaginationItem>
+
+            {startPage > 1 && (
+              <>
+                <PaginationItem>
+                  <PaginationLink onClick={() => setPage(1)}>1</PaginationLink>
+                </PaginationItem>
+                <span className="px-2">...</span>
+              </>
+            )}
+
+            {Array.from({ length: endPage - startPage + 1 }).map((_, index) => {
+              const pageNumber = startPage + index;
+              return (
+                <PaginationItem key={pageNumber}>
+                  <PaginationLink
+                    className="cursor-pointer"
+                    isActive={page === pageNumber}
+                    onClick={() => setPage(pageNumber)}
+                  >
+                    {pageNumber}
+                  </PaginationLink>
+                </PaginationItem>
+              );
+            })}
+
+            {endPage < totalPages && (
+              <>
+                <span className="px-2">...</span>
+                <PaginationItem>
+                  <PaginationLink onClick={() => setPage(totalPages)}>
+                    {totalPages}
+                  </PaginationLink>
+                </PaginationItem>
+              </>
+            )}
+
+            <PaginationItem>
+              <PaginationNext
+                className={buttonVariants({ variant: "outline" })}
+                onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
     </div>
   );
